@@ -1,5 +1,3 @@
-import unittest
-
 # binary search
 class search(object):
     def last_position(self, nums, target):
@@ -32,40 +30,66 @@ class search(object):
         else:
             return -1
 
-# Here's our "unit tests".
-class is_last_postion_tests(unittest.TestCase):
-    def test_1(self):
-        s=search()
-        nums_test = [1,2,3,4,5]
-        target = 3
-        self.failUnless(s.last_position(nums_test, target)==2)
+# implementation of binary search tree
+# below code (class Node and Tree) are from answer in below SO thread, with some of minor changes made by me
+# this is purely for me to learn and understand the implementation of binary search tree
+# https://stackoverflow.com/questions/2598437/how-to-implement-a-binary-tree
+class Node:
+    def __init__(self, val):
+        self.l = None
+        self.r = None
+        self.v = val
 
-    def test_2(self):
-        s=search()
-        nums_test = [1,2,3,3,4,5]
-        target = 3
-        self.failUnless(s.last_position(nums_test, target)==3)
+class Tree:
+    def __init__(self):
+        self.root = None
 
-    def test_3(self):
-        s=search()
-        nums_test = [3]
-        target = 3
-        self.failUnless(s.last_position(nums_test, target)==0)
+    def getRoot(self):
+        return self.root
 
-    def test_4(self):
-        s=search()
-        nums_test = [3,3]
-        target = 3
-        self.failUnless(s.last_position(nums_test, target)==1)
-        
-    def test_5(self):
-        s=search()
-        nums_test = [1,2,4,5]
-        target = 3
-        self.failUnless(s.last_position(nums_test, target)==-1)
+    def add(self, val):
+        if(self.root == None): # if an empty tree, value assigned to root
+            self.root = Node(val) # crate a new node, and assign to root
+        else:
+            self._add(val, self.root) # if not an empty tree, use _add function
 
-def main():
-    unittest.main()
+    def _add(self, val, node):
+        if(val < node.v):
+            if node.l is None: #exit case
+                node.l = Node(val)
+            else:
+                self._add(val, node.l)
+        else:
+            if node.r is None: #exit case
+                node.r = Node(val) 
+            else: 
+                self._add(val, node.r) 
+            
+    def find(self, val):
+        if(self.root is not None):
+            return self._find(val, self.root)
+        else:
+            return None
+                       
+    def _find(self, val, node): 
+        if(val == node.v): 
+            return node
+        elif(val < node.v and node.l != None): 
+            return self._find(val, node.l) # add return so that recursive calls can run
+        elif(val > node.v and node.r != None): 
+            return self._find(val, node.r) # add return so that recursive calls can run
 
-if __name__ == '__main__':
-    main()
+    def deleteTree(self):
+        self.root = None
+
+    def printTree(self):
+        if(self.root is not None):
+            self._printTree(self.root)
+
+    def _printTree(self, node):
+        if(node is not None):
+            self._printTree(node.l)
+            print str(node.v) + ' '
+            self._printTree(node.r)
+
+
